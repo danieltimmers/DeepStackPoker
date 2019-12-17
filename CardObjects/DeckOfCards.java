@@ -8,4 +8,8 @@ public class DeckOfCards {
     public String getName() {
         return this.deckName;
     }
+
+    public void setName(String deckName) {
+        this.deckName = deckName;
+    }
 }
