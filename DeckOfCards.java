@@ -4,4 +4,8 @@ public class DeckOfCards {
     DeckOfCards() {
         this.deckName = "default";
     }
+
+    public String getName() {
+        return this.deckName;
+    }
 }
