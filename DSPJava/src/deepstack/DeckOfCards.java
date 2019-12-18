@@ -8,18 +8,19 @@ import java.util.*;
  */
 public class DeckOfCards {
 
-    private ArrayList<String> deck;
+    private LinkedList<String> deck;
 
     public DeckOfCards() {
         String[] suite = { " of Clubs", " of Hearts", " of Diamonds", " of Spades" };
         String[] rank = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
-        this.deck = new ArrayList<String>(); // TODO determine best data structure for 52 card deck
+        this.deck = new LinkedList<String>(); // TODO determine best data structure for 52 card deck
 
         for (String i : suite) {
             for (String k : rank) {
                 deck.add(k + i); // TODO Not sure if this is BP for string concantenation
             }
         }
+        shuffleDeck();
     }
 
     /**
@@ -33,8 +34,22 @@ public class DeckOfCards {
         return this.deck.size();
     }
 
+    public LinkedList<String> getDeck() {
+        return this.deck;
+    }
+
     public String getCard(int n) {
         return deck.get(n);
+    }
+
+    public LinkedList<String> getCards(int n) {
+        LinkedList<String> nCards = new LinkedList<String>();
+        int i = 0;
+        while (i < n) {
+            nCards.add(this.deck.get(i));
+            i++;
+        }
+        return nCards;
     }
 
     /**
@@ -51,5 +66,10 @@ public class DeckOfCards {
      */
     public void buryOne() {
         Collections.rotate(this.deck, -1);
+    }
+
+    public void buryOne(int n) {
+        Collections.rotate(this.deck, -n);
+
     }
 }
