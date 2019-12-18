@@ -13,11 +13,11 @@ public class DeckOfCards {
     public DeckOfCards() {
         String[] suite = { " of Clubs", " of Hearts", " of Diamonds", " of Spades" };
         String[] rank = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
-        this.deck = new ArrayList<String>();
+        this.deck = new ArrayList<String>(); // TODO determine best data structure for 52 card deck
 
         for (String i : suite) {
             for (String k : rank) {
-                deck.add(k + i);
+                deck.add(k + i); // TODO Not sure if this is BP for string concantenation
             }
         }
     }
@@ -37,10 +37,18 @@ public class DeckOfCards {
         return deck.get(n);
     }
 
+    /**
+     * removes the top card in the deck and shifts the remaining cards to the left
+     * by 1
+     */
     public void burn() {
         deck.remove(0);
     }
 
+    /**
+     * moves the top card of the deck to the bottom and shifts the other cards
+     * appropriately (card at index 1 is now 0 etc.)
+     */
     public void buryOne() {
         Collections.rotate(this.deck, -1);
     }
