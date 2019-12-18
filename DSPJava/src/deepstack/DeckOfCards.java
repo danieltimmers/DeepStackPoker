@@ -2,7 +2,9 @@ package deepstack;
 
 import java.util.*;
 
-//This file is the deck of cards from which the game is played
+/**
+ * This object is the deck of cards from which the game is played
+ */
 public class DeckOfCards {
 
     private ArrayList<String> deck;
