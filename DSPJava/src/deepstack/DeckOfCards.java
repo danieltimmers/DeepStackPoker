@@ -3,8 +3,8 @@ package deepstack;
 import java.util.*;
 
 /**
- * This object is the deck of cards from which the game is played. The deck of cards contains 52 unique cards.
- * There are 13 ranks of each 4 suits.
+ * This object is the deck of cards from which the game is played. The deck of
+ * cards contains 52 unique cards. There are 13 ranks of each 4 suits.
  */
 public class DeckOfCards {
 
@@ -38,7 +38,11 @@ public class DeckOfCards {
     }
 
     public void burn() {
+        // TODO Should we burn the card or move it to the bottom
         deck.remove(0);
     }
 
+    public void buryOne() {
+        Collections.rotate(this.deck, -1);
+    }
 }
