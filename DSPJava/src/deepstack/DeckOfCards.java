@@ -4,6 +4,7 @@ import java.util.*;
 
 /**
  * This object is the deck of cards from which the game is played. The deck of cards contains 52 unique cards.
+ * There are 13 ranks of each 4 suits.
  */
 public class DeckOfCards {
 
