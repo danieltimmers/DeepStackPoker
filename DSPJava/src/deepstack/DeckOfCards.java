@@ -38,7 +38,6 @@ public class DeckOfCards {
     }
 
     public void burn() {
-        // TODO Should we burn the card or move it to the bottom
         deck.remove(0);
     }
 
