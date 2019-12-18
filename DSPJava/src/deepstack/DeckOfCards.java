@@ -3,7 +3,7 @@ package deepstack;
 import java.util.*;
 
 /**
- * This object is the deck of cards from which the game is played
+ * This object is the deck of cards from which the game is played. The deck of cards contains 52 unique cards.
  */
 public class DeckOfCards {
 
