@@ -11,7 +11,7 @@ public class DeckOfCards {
     private LinkedList<String> deck;
 
     public DeckOfCards() {
-        String[] suite = { " of Clubs", " of Hearts", " of Diamonds", " of Spades" };
+        String[] suite = { " of Spades", " of Hearts", " of Diamonds", " of Clubs" };
         String[] rank = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
         this.deck = new LinkedList<String>(); // TODO determine best data structure for 52 card deck
 
