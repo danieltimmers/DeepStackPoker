@@ -11,7 +11,7 @@ public class Deck {
     private final String[] SUITES = { " of Clubs", " of Diamonds", " of Hearts", " of Spades" };
     private final String[] RANK = { "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack",
             "Queen", "King", "Ace" };
-    private final LinkedList<Card> deck;
+    private LinkedList<Card> deck;
 
     public Deck() {
         this.deck = this.deckBuilder();
