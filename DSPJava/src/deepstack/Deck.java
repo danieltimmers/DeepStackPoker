@@ -8,16 +8,16 @@ import java.util.*;
  */
 public class Deck {
 
-    private LinkedList<Card> deck;
-    private int n = 0;
+    private final LinkedList<Card> deck;
+    private int id = 0;
 
     public Deck() {
         this.deck = new LinkedList<Card>();
-        for (Suite s : Suite.values()) {
-            for (Rank r : Rank.values()) {
-                Card card = new Card(n, r, s);
+        for (final Suite s : Suite.values()) {
+            for (final Rank r : Rank.values()) {
+                final Card card = new Card(id, r, s);
                 deck.add(card);
-                n++;
+                id++;
             }
         }
         shuffleDeck();
@@ -27,12 +27,12 @@ public class Deck {
         Collections.shuffle(this.deck);
     }
 
-    public Card getCard(int n) {
+    public Card getCard(final int n) {
         return this.deck.get(n);
     }
 
-    public Card[] getNCards(int n) {
-        Card[] nCards = new Card[n];
+    public Card[] getNCards(final int n) {
+        final Card[] nCards = new Card[n];
         int i = 0;
         while (i < n) {
             nCards[i] = this.deck.get(i);
@@ -45,7 +45,7 @@ public class Deck {
         Collections.rotate(this.deck, -1);
     }
 
-    public void buryOne(int n) {
+    public void buryOne(final int n) {
         Collections.rotate(this.deck, -n);
 
     }

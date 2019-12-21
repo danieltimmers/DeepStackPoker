@@ -6,7 +6,7 @@ public class Card {
     private final Rank R;
     private final Suite S;
 
-    public Card(int ID, Rank R, Suite S) {
+    public Card(final int ID, final Rank R, final Suite S) {
         this.ID = ID;
         this.R = R;
         this.S = S;

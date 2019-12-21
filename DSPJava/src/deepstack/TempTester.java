@@ -5,9 +5,9 @@ public class TempTester {
 
         Deck deck = new Deck();
 
-        System.out.println(deck.getCard(0));
-        System.out.println(deck.getCard(0).rank());
-        System.out.println(deck.getCard(0).ID());
-        System.out.println(deck.getCard(6));
+        Card[] testCards = deck.getNCards(3);
+        for (Card c : testCards) {
+            System.out.println(c);
+        }
     }
 }
