@@ -8,67 +8,35 @@ import java.util.*;
  */
 public class Deck {
 
-    private final String[] SUITES = { " of Clubs", " of Diamonds", " of Hearts", " of Spades" };
-    private final String[] RANK = { "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack",
-            "Queen", "King", "Ace" };
     private LinkedList<Card> deck;
+    private int n = 0;
 
     public Deck() {
-        this.deck = this.deckBuilder();
-    }
-
-    private LinkedList<Card> deckBuilder() {
-
-        LinkedList<Card> builderDeck = new LinkedList<Card>();
-        int cardID = 1;
-        int rankID;
-        int suiteID = 1;
-        for (String i : this.SUITES) {
-            rankID = 2;
-            for (String k : this.RANK) {
-                Card aCard = new Card(cardID, rankID, suiteID, k, i);
-                cardID++;
-                rankID++;
-                builderDeck.add(aCard);
+        this.deck = new LinkedList<Card>();
+        for (Suite s : Suite.values()) {
+            for (Rank r : Rank.values()) {
+                Card card = new Card(n, r, s);
+                deck.add(card);
+                n++;
             }
-            suiteID++;
         }
-        Collections.shuffle(builderDeck);
-        return builderDeck;
+        shuffleDeck();
     }
 
-    /**
-     * this method contains the shuffle() method under the Collections Object
-     */
     public void shuffleDeck() {
         Collections.shuffle(this.deck);
     }
 
-    public int getLength() {
-        return this.deck.size();
+    public Card[] getNCards(int n) {
+        Card[] nCards = new Card[n];
+        int i = 0;
+        while (i < n) {
+            nCards[i] = this.deck.get(i);
+            i++;
+        }
+        return nCards;
     }
 
-    public Card getCard(int n) {
-        return this.deck.get(n);
-    }
-
-    /*
-     * public LinkedList<String> getCards(int n) { LinkedList<String> nCards = new
-     * LinkedList<String>(); int i = 0; while (i < n) {
-     * nCards.add(this.deck.get(i)); i++; } return nCards; }
-     */
-
-    /**
-     * removes the top card in the deck and shifts the remaining cards to the left
-     * by 1
-     */
-    /*
-     * public void burn() { deck.remove(0); }
-     */
-    /**
-     * moves the top card of the deck to the bottom and shifts the other cards
-     * appropriately (card at index 1 is now 0 etc.)
-     */
     public void buryOne() {
         Collections.rotate(this.deck, -1);
     }

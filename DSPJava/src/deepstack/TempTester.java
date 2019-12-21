@@ -3,14 +3,11 @@ package deepstack;
 public class TempTester {
     public static void main(String[] args) {
 
-        // DeckOfCards deck2 = new DeckOfCards();
-        /*
-         * System.out.println(deck2.getDeck()); System.out.println(deck2.getCard(0));
-         * System.out.println(deck2.getLength()); System.out.println(deck2.getCards(3));
-         * System.out.println(deck2.getDeck());
-         */
         Deck deck = new Deck();
-        System.out.println(deck.getCard(0).toString());
 
+        System.out.println(deck.getCard(0));
+        System.out.println(deck.getCard(0).rank());
+        System.out.println(deck.getCard(0).ID());
+        System.out.println(deck.getCard(6));
     }
 }
