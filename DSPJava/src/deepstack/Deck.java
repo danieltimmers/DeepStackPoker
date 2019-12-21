@@ -27,6 +27,10 @@ public class Deck {
         Collections.shuffle(this.deck);
     }
 
+    public Card getCard() {
+        return this.deck.get(0);
+    }
+
     public Card getCard(final int n) {
         return this.deck.get(n);
     }
@@ -41,6 +45,14 @@ public class Deck {
         return nCards;
     }
 
+    public void addCard(Card c) {
+        this.deck.add(c);
+    }
+
+    public void removeCard() {
+        this.deck.remove(0);
+    }
+
     public void buryOne() {
         Collections.rotate(this.deck, -1);
     }
@@ -48,6 +60,10 @@ public class Deck {
     public void buryOne(final int n) {
         Collections.rotate(this.deck, -n);
 
+    }
+
+    public int cardsLeft() { 
+        return this.deck.size();
     }
 
 }

@@ -3,11 +3,13 @@ package deepstack;
 public class TempTester {
     public static void main(String[] args) {
 
-        Deck deck = new Deck();
+        Dealer dealer1 = new Dealer("Bob");
 
-        Card[] testCards = deck.getNCards(3);
-        for (Card c : testCards) {
-            System.out.println(c);
-        }
+        System.out.println(dealer1.drawCard());
+        dealer1.burnCard();
+        System.out.println(dealer1.getDiscard());
+        dealer1.burnCard();
+        System.out.println(dealer1.discarded());
+        dealer1.resetDeck();
     }
 }
