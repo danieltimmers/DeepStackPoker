@@ -27,6 +27,10 @@ public class Deck {
         Collections.shuffle(this.deck);
     }
 
+    public Card getCard(int n) {
+        return this.deck.get(n);
+    }
+
     public Card[] getNCards(int n) {
         Card[] nCards = new Card[n];
         int i = 0;
