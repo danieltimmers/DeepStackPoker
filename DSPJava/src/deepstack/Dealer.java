@@ -5,13 +5,12 @@ import java.util.*;
 public class Dealer {
 
     private LinkedList<Card> deck;
-    private final String NAME;
     private LinkedList<Card> discardPile;
     private LinkedList<Card> cardsDealt;
+    private PokerTable table;
 
-    public Dealer(String name) {
+    public Dealer() {
         this.deck = buildDeck();
-        this.NAME = name;
         this.discardPile = new LinkedList<Card>();
         this.cardsDealt = new LinkedList<Card>();
     }
@@ -34,7 +33,7 @@ public class Dealer {
         Collections.shuffle(this.deck);
     }
 
-    public void burnCard() {
+    private void burnCard() {
         discardPile.add(deck.get(0));
         deck.remove(0);
     }
@@ -53,6 +52,10 @@ public class Dealer {
         }
     }
 
+    public void dealFlop() {
+
+    }
+
     public void callWinner() {
 
     }
@@ -68,9 +71,4 @@ public class Dealer {
         cardsDealt.clear();
         shuffleDeck();
     }
-
-    public String getName() {
-        return this.NAME;
-    }
-
 }
