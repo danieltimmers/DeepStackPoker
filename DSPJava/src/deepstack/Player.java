@@ -11,11 +11,15 @@ public class Player {
     public Player(String playerName, int chipStack) {
         this.playerName = playerName;
         this.chipStack = chipStack;
+        this.pocket = new LinkedList<Card>();
+        this.hand = new LinkedList<Card>();
     }
 
     public void acceptCard(Card c) {
-        this.pocket.add(c);
         this.hand.add(c);
+        if (this.pocket.size() <= 2) {
+            this.pocket.add(c);
+        }
     }
 
     public void fold() {
@@ -53,5 +57,9 @@ public class Player {
 
     public String getName() {
         return this.playerName;
+    }
+
+    public String showPocket() {
+        return this.pocket.get(0) + "\n" + this.pocket.get(1);
     }
 }

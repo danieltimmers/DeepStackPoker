@@ -7,7 +7,6 @@ public class Dealer {
     private LinkedList<Card> deck;
     private LinkedList<Card> discardPile;
     private LinkedList<Card> cardsDealt;
-    private PokerTable table;
 
     public Dealer() {
         this.deck = buildDeck();
@@ -25,7 +24,7 @@ public class Dealer {
                 id++;
             }
         }
-        shuffleDeck();
+        Collections.shuffle(newDeck);
         return newDeck;
     }
 
@@ -70,5 +69,15 @@ public class Dealer {
         discardPile.clear();
         cardsDealt.clear();
         shuffleDeck();
+    }
+
+    public LinkedList<Card> cardsDealt() {
+        return cardsDealt;
+    }
+
+    public void showCardsDealt() {
+        for (Card c : cardsDealt) {
+            System.out.println(c);
+        }
     }
 }
