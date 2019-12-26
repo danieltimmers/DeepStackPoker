@@ -22,6 +22,14 @@ public class Player {
         }
     }
 
+    public void seeTableCards(Game g) {
+        for (Card c : g.tbl.communityCards()) {
+            if (!c.equals(hand.get(0))) {
+                this.hand.add(c);
+            }
+        }
+    }
+
     public void fold() {
 
     }
@@ -60,6 +68,12 @@ public class Player {
     }
 
     public String showPocket() {
-        return this.pocket.get(0) + "\n" + this.pocket.get(1);
+        return this.pocket.get(0) + "\n" + this.pocket.get(1) + "\n";
+    }
+
+    public void showHand() {
+        for (Card c : this.hand) {
+            System.out.println(c);
+        }
     }
 }

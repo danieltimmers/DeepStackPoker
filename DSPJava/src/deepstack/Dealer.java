@@ -43,6 +43,12 @@ public class Dealer {
         deck.remove(0);
     }
 
+    private void giveCard(PokerTable tbl) {
+        tbl.addCommunityCard(deck.get(0));
+        cardsDealt.add(deck.get(0));
+        deck.remove(0);
+    }
+
     public void dealPockets(LinkedList<Player> players) {
         for (int i = 0; i < 2; i++) {
             for (Player p : players) {
@@ -51,8 +57,29 @@ public class Dealer {
         }
     }
 
-    public void dealFlop() {
+    public void dealPockets(Game g) {
+        for (int i = 0; i < 2; i++) {
+            for (Player p : g.players) {
+                giveCard(p);
+            }
+        }
+    }
 
+    public void dealFlop(Game g) {
+        burnCard();
+        for (int i = 0; i < 3; i++) {
+            giveCard(g.tbl);
+        }
+    }
+
+    public void dealTurn(Game g) {
+        burnCard();
+        giveCard(g.tbl);
+    }
+
+    public void dealRiver(Game g) {
+        burnCard();
+        giveCard(g.tbl);
     }
 
     public void callWinner() {
@@ -77,6 +104,12 @@ public class Dealer {
 
     public void showCardsDealt() {
         for (Card c : cardsDealt) {
+            System.out.println(c);
+        }
+    }
+
+    public void showDiscardPile() {
+        for (Card c : discardPile) {
             System.out.println(c);
         }
     }

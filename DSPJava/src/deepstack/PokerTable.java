@@ -3,7 +3,6 @@ package deepstack;
 import java.util.*;
 
 public class PokerTable {
-    private Dealer dealer;
     private LinkedList<Player> players;
     private LinkedList<Card> communityCards;
     private int pot;
@@ -11,7 +10,7 @@ public class PokerTable {
     private int bigB;
 
     public PokerTable(int smallB, int bigB) {
-        this.dealer = new Dealer();
+
         this.players = new LinkedList<Player>();
         this.communityCards = new LinkedList<Card>();
         this.pot = 0;
@@ -23,8 +22,18 @@ public class PokerTable {
         Collections.rotate(players, -1);
     }
 
+    public LinkedList<Card> communityCards() {
+        return this.communityCards;
+    }
+
     public void addCommunityCard(Card c) {
         this.communityCards.add(c);
+    }
+
+    public void showCommunityCards() {
+        for (Card c : communityCards) {
+            System.out.println(c);
+        }
     }
 
     public void addPlayer(Player p) {
@@ -33,10 +42,6 @@ public class PokerTable {
 
     public void removePlayer(int i) {
         this.players.remove(i);
-    }
-
-    public Dealer dealer() {
-        return this.dealer;
     }
 
     public LinkedList<Player> players() {

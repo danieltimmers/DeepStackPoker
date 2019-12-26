@@ -5,27 +5,40 @@ import java.util.*;
 public class TempTester {
     public static void main(String[] args) {
 
-        Player player1 = new Player("Robert", 100);
+        Player player1 = new Player("Daniel", 100);
         Player player2 = new Player("John", 100);
-        Player player3 = new Player("Daniel", 100);
-        Player player4 = new Player("Whitney", 100);
+        Player player3 = new Player("Robert", 100);
 
-        /*
-         * LinkedList<Player> players = new LinkedList<Player>(); players.add(player1);
-         * players.add(player2); players.add(player3); players.add(player4);
-         */
+        Game g1 = new Game();
+        g1.players.add(player1);
+        g1.players.add(player2);
+        g1.players.add(player3);
 
-        PokerTable pt = new PokerTable(1, 2);
-        pt.addPlayer(player1);
-        pt.addPlayer(player2);
-        pt.addPlayer(player3);
-        pt.addPlayer(player4);
+        g1.dealer.dealPockets(g1);
 
-        pt.dealer().dealPockets(pt.players());
+        for (Player p : g1.players) {
+            System.out.println(p.showPocket());
+        }
 
-        System.out.println(player1.showPocket());
+        System.out.println("\nNext, show flop\n");
 
-        System.out.println(player1.bet(200));
+        g1.dealer.dealFlop(g1);
+
+        g1.tbl.showCommunityCards();
+
+        g1.dealer.dealTurn(g1);
+        g1.dealer.dealRiver(g1);
+        System.out.println("\nNext show all Community Cards\n");
+
+        g1.tbl.showCommunityCards();
+
+        System.out.println("\n\nTest Test\n");
+
+        for (Player p : g1.players) {
+            p.seeTableCards(g1);
+        }
+
+        g1.players.get(0).showHand();
 
     }
 }
