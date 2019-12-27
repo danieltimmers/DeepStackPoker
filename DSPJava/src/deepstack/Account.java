@@ -34,4 +34,7 @@ public class Account {
         return tryMoney < this.wallet;
     }
 
+    public String getPassword() {
+        return this.password;
+    }
 }

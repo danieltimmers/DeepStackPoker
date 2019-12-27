@@ -3,14 +3,26 @@ package deepstack;
 import java.util.*;
 
 public class Game {
-    public Dealer dealer;
-    public PokerTable tbl;
-    public LinkedList<Player> players;
+    private Dealer dealer;
+    private PokerTable tbl;
+    private LinkedList<Player> players;
 
     public Game() {
-        dealer = new Dealer();
+        this.dealer = new Dealer();
         tbl = new PokerTable(1, 2);
         players = new LinkedList<Player>();
+    }
+
+    public Dealer dealer() {
+        return this.dealer;
+    }
+
+    public LinkedList<Player> players() {
+        return players;
+    }
+
+    public PokerTable tbl() {
+        return tbl;
     }
 
 }
