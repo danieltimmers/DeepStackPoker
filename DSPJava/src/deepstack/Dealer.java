@@ -120,46 +120,91 @@ public class Dealer {
         }
     }
 
-    private int checkMaxDuplicity(Player p) {
-        int rankDuplicityI;
-        int rankDuplicity = 1;
-        int highCard = 0;
-        for (Card c : p.hand()) {
-            rankDuplicityI = 1;
-            if (highCard < c.rankID()) {
-                highCard = c.rankID();
+    public void checkHandStrength(Player p) {
+        p.sortHand();
+        int rankDuplicityA = 1;
+        int rankDuplicityB = 1;
+        int handStrength = 1;
+        int highCard = p.hand().get(0).rankID();
+
+        for (int i = 0; i < p.hand().size() - 1; i++) {
+            int rankDiff = p.hand().get(i).rankID() - p.hand().get(i + 1).rankID();
+            if (rankDuplicityA == 1 && rankDiff != 0) {
+                continue;
             }
-            for (int i = (p.hand().indexOf(c) + 1); i < p.hand().size(); i++) {
-                if (c.rankID() == p.hand().get(i).rankID()) {
-                    rankDuplicityI++;
+            if (rankDiff != 0 && rankDuplicityA > 1 && rankDuplicityB > 1) {
+                break;
+            }
+            if (rankDiff == 0) {
+                rankDuplicityA++;
+                if (rankDuplicityA > rankDuplicityB) {
+                    highCard = p.hand().get(i).rankID();
                 }
+                continue;
             }
-            if (rankDuplicityI == 3 && rankDuplicity == 2) {
-                rankDuplicity = 32;
-                p.bestHand().setHighCard(c.rankID());
+            if (rankDuplicityA > 1 && rankDuplicityB == 1) {
+                rankDuplicityB = rankDuplicityA;
+                rankDuplicityA = 1;
             }
-            if ((rankDuplicityI == 2 && rankDuplicity == 3) && (c.rankID() != p.bestHand().highCard())) {
-                rankDuplicity = 32;
-            }
-            if (rankDuplicityI == 2 && rankDuplicity == 2) {
-                rankDuplicity = 22;
-                if (c.rankID() > p.bestHand().highCard()) {
-                    p.bestHand().setHighCard(c.rankID());
-                }
-            }
-            if (rankDuplicityI > rankDuplicity) {
-                rankDuplicity = rankDuplicityI;
-                p.bestHand().setHighCard(c.rankID());
-            }
+
         }
-        if (rankDuplicity == 1) {
-            p.bestHand().setHighCard(highCard);
+        if (rankDuplicityA == 1 && rankDuplicityB == 1) {
+            handStrength = 1;
         }
-        return rankDuplicity;
+        if ((rankDuplicityB == 2 ^ rankDuplicityA == 2)) {
+            handStrength = 2;
+        }
+        if ((rankDuplicityB == 2) && (rankDuplicityA == 2)) {
+            handStrength = 3;
+        }
+        if ((rankDuplicityB == 3 && rankDuplicityA == 1) || (rankDuplicityB == 1 && rankDuplicityA == 3)) {
+            handStrength = 4;
+        }
+        if (checkFlush(p)) {
+            handStrength = 6;
+        }
+        if ((rankDuplicityA >= 2 && rankDuplicityB == 3) || (rankDuplicityA == 3 && rankDuplicityB >= 2)) {
+            handStrength = 7;
+        }
+        if (rankDuplicityB == 4 || rankDuplicityA == 4) {
+            handStrength = 8;
+        }
+        setHandStrength(p, handStrength, highCard);
+
     }
 
-    public void setHandStrength(Player p) {
-        switch (checkMaxDuplicity(p)) {
+    private boolean checkFlush(Player p) {
+        boolean flush = false;
+        int spade = 0;
+        int heart = 0;
+        int diamond = 0;
+        int club = 0;
+        for (Card c : p.hand()) {
+            switch (c.suiteID()) {
+            case 0:
+                club++;
+                break;
+            case 1:
+                diamond++;
+                break;
+            case 2:
+                heart++;
+                break;
+            case 3:
+                spade++;
+                break;
+            }
+        }
+        if (club >= 5 || diamond >= 5 || heart >= 5 || spade >= 5) {
+            flush = true;
+        }
+
+        return flush;
+    }
+
+    private void setHandStrength(Player p, int handStrength, int highCard) {
+        p.bestHand().setHighCard(highCard);
+        switch (handStrength) {
         case 1:
             p.bestHand().setHandStrength(1);
             p.bestHand().setHandName("High Card");
@@ -168,22 +213,39 @@ public class Dealer {
             p.bestHand().setHandStrength(2);
             p.bestHand().setHandName("Pair");
             break;
-        case 22:
+        case 3:
             p.bestHand().setHandStrength(3);
             p.bestHand().setHandName("Two Pair");
             break;
-        case 3:
+        case 4:
             p.bestHand().setHandStrength(4);
             p.bestHand().setHandName("Three of a kind");
             break;
-        case 32:
+        case 5:
+            p.bestHand().setHandStrength(5);
+            p.bestHand().setHandName("Straight");
+            break;
+        case 6:
+            p.bestHand().setHandStrength(6);
+            p.bestHand().setHandName("Flush");
+            break;
+        case 7:
             p.bestHand().setHandStrength(7);
             p.bestHand().setHandName("Full House");
             break;
-        case 4:
+        case 8:
             p.bestHand().setHandStrength(8);
             p.bestHand().setHandName("Four of a kind");
             break;
+        case 9:
+            p.bestHand().setHandStrength(9);
+            p.bestHand().setHandName("Straight-Flush");
+            break;
+        }
+        if (highCard == 14 && handStrength == 9) {
+            p.bestHand().setHandStrength(10);
+            p.bestHand().setHandName("Royal-Flush");
         }
     }
+
 }

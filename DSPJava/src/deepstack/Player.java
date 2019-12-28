@@ -17,6 +17,14 @@ public class Player {
         this.bestHand = new BestHand();
     }
 
+    public Player() {
+        this.playerName = "default";
+        this.chipStack = 100;
+        this.pocket = new LinkedList<Card>();
+        this.hand = new LinkedList<Card>();
+        this.bestHand = new BestHand();
+    }
+
     public void joinGame(Game g) {
         g.players().add(this);
     }
