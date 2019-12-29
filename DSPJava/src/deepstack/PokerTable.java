@@ -48,6 +48,11 @@ public class PokerTable {
         this.communityCards.add(c);
     }
 
+    public void resetTable() {
+        this.communityCards.clear();
+        this.pot = 0;
+    }
+
     public void showCommunityCards() {
         for (Card c : communityCards) {
             System.out.println(c);

@@ -29,6 +29,12 @@ public class Player {
         g.players().add(this);
     }
 
+    public void resetHand() {
+        this.pocket.clear();
+        this.hand.clear();
+        this.bestHand = new BestHand();
+    }
+
     public void acceptCard(Card c) {
         this.hand.add(c);
         if (this.pocket.size() <= 2) {
@@ -108,6 +114,7 @@ public class Player {
         private int handStrength;
         private String handName;
         private int highCard;
+        private LinkedList<Card> bestHand;
 
         /*
          * private int pairRankA; private int pairRankB; private int tripleRankA;
@@ -118,6 +125,15 @@ public class Player {
         public BestHand() {
             this.handStrength = 0;
             this.highCard = 0;
+            this.bestHand = new LinkedList<Card>();
+        }
+
+        public void setBestHand(LinkedList<Card> bestHand) {
+            this.bestHand = bestHand;
+        }
+
+        public LinkedList<Card> bestHand() {
+            return this.bestHand;
         }
 
         public void setHandStrength(int handStrength) {

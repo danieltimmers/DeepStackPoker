@@ -125,7 +125,7 @@ public class Dealer {
         int rankDuplicityA = 1;
         int rankDuplicityB = 1;
         int handStrength = 1;
-        int highCard = p.hand().get(0).rankID();
+        // int highCard = p.hand().get(0).rankID();
 
         for (int i = 0; i < p.hand().size() - 1; i++) {
             int rankDiff = p.hand().get(i).rankID() - p.hand().get(i + 1).rankID();
@@ -138,7 +138,7 @@ public class Dealer {
             if (rankDiff == 0) {
                 rankDuplicityA++;
                 if (rankDuplicityA > rankDuplicityB) {
-                    highCard = p.hand().get(i).rankID();
+                    // highCard = p.hand().get(i).rankID();
                 }
                 continue;
             }
@@ -160,6 +160,9 @@ public class Dealer {
         if ((rankDuplicityB == 3 && rankDuplicityA == 1) || (rankDuplicityB == 1 && rankDuplicityA == 3)) {
             handStrength = 4;
         }
+        if (checkStraight(p)) {
+            handStrength = 5;
+        }
         if (checkFlush(p)) {
             handStrength = 6;
         }
@@ -169,8 +172,77 @@ public class Dealer {
         if (rankDuplicityB == 4 || rankDuplicityA == 4) {
             handStrength = 8;
         }
-        setHandStrength(p, handStrength, highCard);
+        if (checkStraightFlush(p)) {
+            handStrength = 9;
+        }
+        setHandStrength(p, handStrength);
 
+    }
+
+    private boolean checkStraight(Player p) {
+
+        boolean straight = false;
+        LinkedList<Card> bestHand = new LinkedList<Card>();
+        bestHand.add(p.hand().get(0));
+        int nToStraight = 4;
+        int rankDiff;
+        // check for ace to consider low ace case
+        if (p.hand().getFirst().rankID() == 14) {
+            p.hand().addLast(p.hand().getFirst());
+        }
+        for (int i = 0; i < p.hand().size() - 1; i++) {
+            // if straight is possible
+            if (nToStraight <= (p.hand().size() - i)) {
+                // check rank difference to nex card
+                rankDiff = p.hand().get(i).rankID() - p.hand().get(i + 1).rankID();
+                // if next rank differs by one or -12 for low ace case
+                if (rankDiff == 1 || rankDiff == -12) {
+                    bestHand.add(p.hand().get(i + 1));
+                    nToStraight--;
+                    if (nToStraight == 0) {
+                        straight = true;
+                        p.bestHand().setBestHand(bestHand);
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+                // if the next card is the same rank, do nothing but continue to next iteration
+                if (rankDiff == 0) {
+                    continue;
+                }
+                // if next card will kill current straight build,
+                // reset nToStraight and bestHand with next card
+                else {
+                    bestHand.clear();
+                    bestHand.add(p.hand().get(i + 1));
+                    nToStraight = 4;
+                }
+
+            } else {
+                break;
+            }
+        }
+        // if low ace was added, remove it
+        if (p.hand().getLast().rankID() == 14) {
+            p.hand().removeLast();
+        }
+        return straight;
+    }
+
+    private boolean checkStraightFlush(Player p) {
+        boolean straightFlush = false;
+        for (int i = 0; i < p.bestHand().bestHand().size() - 1; i++) {
+            if (p.bestHand().bestHand().get(i).suiteID() == p.bestHand().bestHand().get(i + 1).suiteID()) {
+                if (i == 3) {
+                    straightFlush = true;
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+        return straightFlush;
     }
 
     private boolean checkFlush(Player p) {
@@ -202,8 +274,7 @@ public class Dealer {
         return flush;
     }
 
-    private void setHandStrength(Player p, int handStrength, int highCard) {
-        p.bestHand().setHighCard(highCard);
+    private void setHandStrength(Player p, int handStrength) {
         switch (handStrength) {
         case 1:
             p.bestHand().setHandStrength(1);
@@ -238,14 +309,16 @@ public class Dealer {
             p.bestHand().setHandName("Four of a kind");
             break;
         case 9:
-            p.bestHand().setHandStrength(9);
-            p.bestHand().setHandName("Straight-Flush");
+            if (p.bestHand().bestHand().get(0).rankID() == 14) {
+                p.bestHand().setHandStrength(10);
+                p.bestHand().setHandName("Royal-Flush");
+            } else {
+                p.bestHand().setHandStrength(9);
+                p.bestHand().setHandName("Straight-Flush");
+            }
             break;
         }
-        if (highCard == 14 && handStrength == 9) {
-            p.bestHand().setHandStrength(10);
-            p.bestHand().setHandName("Royal-Flush");
-        }
+
     }
 
 }
