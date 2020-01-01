@@ -2,7 +2,7 @@ package deepstack;
 
 //import java.util.*;
 
-public class TempTester {
+public class TempTesterMacro {
     public static void main(String[] args) {
 
         Game gg = new Game(10);

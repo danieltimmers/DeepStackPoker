@@ -29,6 +29,10 @@ public class Dealer {
         return newDeck;
     }
 
+    public LinkedList<Card> getDeck() {
+        return this.deck;
+    }
+
     private void shuffleDeck() {
         Collections.shuffle(this.deck);
     }
@@ -121,7 +125,7 @@ public class Dealer {
     }
 
     public void checkHandStrength(Player p) {
-        p.sortHand();
+
         int rankDuplicityA = 1;
         int rankDuplicityB = 1;
         int handStrength = 1;
@@ -163,18 +167,14 @@ public class Dealer {
         if (checkStraight(p)) {
             handStrength = 5;
         }
-        if (checkFlush(p)) {
-            handStrength = 6;
-        }
+
         if ((rankDuplicityA >= 2 && rankDuplicityB == 3) || (rankDuplicityA == 3 && rankDuplicityB >= 2)) {
             handStrength = 7;
         }
         if (rankDuplicityB == 4 || rankDuplicityA == 4) {
             handStrength = 8;
         }
-        if (checkStraightFlush(p)) {
-            handStrength = 9;
-        }
+
         setHandStrength(p, handStrength);
 
     }
@@ -192,7 +192,7 @@ public class Dealer {
         }
         for (int i = 0; i < p.hand().size() - 1; i++) {
             // if straight is possible
-            if (nToStraight <= (p.hand().size() - i)) {
+            if (nToStraight < (p.hand().size() - i)) {
                 // check rank difference to nex card
                 rankDiff = p.hand().get(i).rankID() - p.hand().get(i + 1).rankID();
                 // if next rank differs by one or -12 for low ace case
@@ -201,7 +201,7 @@ public class Dealer {
                     nToStraight--;
                     if (nToStraight == 0) {
                         straight = true;
-                        p.bestHand().setBestHand(bestHand);
+                        p.bestHand().setHand(bestHand);
                         break;
                     } else {
                         continue;
@@ -230,48 +230,116 @@ public class Dealer {
         return straight;
     }
 
-    private boolean checkStraightFlush(Player p) {
-        boolean straightFlush = false;
-        for (int i = 0; i < p.bestHand().bestHand().size() - 1; i++) {
-            if (p.bestHand().bestHand().get(i).suiteID() == p.bestHand().bestHand().get(i + 1).suiteID()) {
-                if (i == 3) {
-                    straightFlush = true;
-                    break;
+    /**
+     * Check to see if a flush exists in Player p's hand()
+     * 
+     * @param p
+     */
+    private void checkFlush(Player p) {
+        // first sort players hand() by suite for easiest flush detection
+        p.sortCardsBySuite(p.hand());
+
+        // Create list for possible flush hand
+        LinkedList<Card> flushHand = new LinkedList<Card>();
+        flushHand.add(p.hand().getFirst());
+
+        // number of cards needed to possibly make a flush
+        int nToFlush = 4;
+
+        for (int i = 0; i < p.hand().size() - 1; i++) {
+
+            // check if flush is possible, else stop checking for flush
+            if (nToFlush < p.hand().size() - i) {
+
+                // if this.suiteID == next.suiteID, add next card to flush hand
+                // number of cards needed to make a flush is 1 less
+                // check next card
+                //
+                // else remove all cards from possible flush hand
+                // add next card to possible flush hand
+                // reset counter for possible flush
+                if (p.hand().get(i).suiteID() == p.hand().get(i + 1).suiteID()) {
+                    flushHand.add(p.hand().get(i + 1));
+                    nToFlush--;
+                    continue;
+                } else {
+                    flushHand.clear();
+                    flushHand.add(p.hand().get(i + 1));
+                    nToFlush = 4;
                 }
             } else {
                 break;
             }
-        }
-        return straightFlush;
-    }
 
-    private boolean checkFlush(Player p) {
-        boolean flush = false;
-        int spade = 0;
-        int heart = 0;
-        int diamond = 0;
-        int club = 0;
-        for (Card c : p.hand()) {
-            switch (c.suiteID()) {
-            case 0:
-                club++;
-                break;
-            case 1:
-                diamond++;
-                break;
-            case 2:
-                heart++;
-                break;
-            case 3:
-                spade++;
-                break;
+            // if there exists a flush,
+            // check to see if it is a regular-flush or straight-flush
+            //
+            // else, there is no flush in players hand
+            if (flushHand.size() >= 5) {
+                p.bestHand().setHand(flushHand);
+                if (checkStraight(p)) {
+                    return straightFlush = true;
+                } else {
+                    return flushHand = true;
+                }
+            } else {
+                return flushHand = false;
             }
         }
-        if (club >= 5 || diamond >= 5 || heart >= 5 || spade >= 5) {
-            flush = true;
+    }
+
+    /**
+     * Check to see if a straight exists for Player p
+     */
+    public void checkStraightFlush(Player p) {
+
+        // sort players hand() by rank for easiest straight detection
+        p.sortCardsByRank(p.bestHand().hand());
+
+        // check for case of low ace straight. If case is possible, add ace to the end
+        // of the list
+        if (p.bestHand().hand().getFirst().rankID() == 14 && p.bestHand().hand().getLast().rankID() == 2) {
+            p.bestHand().hand().addLast(p.bestHand().hand().getFirst());
         }
 
-        return flush;
+        ListIterator<Card> handIter = p.bestHand().hand().listIterator();
+
+        // create list for possible straighFlush that will be filled from
+        // p.bestHand().hand()
+        LinkedList<Card> straightFlush = new LinkedList<Card>();
+
+        straightFlush.add(p.bestHand().hand().getFirst());
+
+        // while iterator hasNext && straight-flush is possible -> possibility changes
+        // based on how many cards are left to check and straightFlush.size()
+        while (handIter.hasNext() && (p.bestHand().hand().size() - handIter.nextIndex() > 5 - straightFlush.size())) {
+            // if each two card ranks differ by 1, add to straightFlush
+            if (handIter.next().rankID() - handIter.next().rankID() == 1) {
+                straightFlush.add(handIter.previous());
+                // loop will stop once the highest straight is detected, if one exists
+                if (straightFlush.size() == 5) {
+                    if (straightFlush.getFirst().rankID() == 14) {
+                        p.bestHand().setHand(straightFlush);
+                        p.bestHand().setHandSlang("Royal Flush");
+
+                    }
+                    break;
+                }
+            } else { // if the two cards ranks do not differ by 1, check to see if last card is ace
+                     // to complete a baby straight. loop will stop after this
+                if (handIter.nextIndex() == p.bestHand().hand().size()) {
+                    if (handIter.previous().rankID() - handIter.previous().rankID() == 12) {
+                        handIter.next();
+                        straightFlush.add(handIter.next());
+                        break;
+                    }
+                } else {// if the two cards ranks do not differ by 1, and baby straight is not detected,
+                        // start over check loop
+                    straightFlush.clear();
+                    straightFlush.add(handIter.previous());
+                }
+            }
+        }
     }
 
     private void setHandStrength(Player p, int handStrength) {
@@ -309,7 +377,7 @@ public class Dealer {
             p.bestHand().setHandName("Four of a kind");
             break;
         case 9:
-            if (p.bestHand().bestHand().get(0).rankID() == 14) {
+            if (p.bestHand().hand().get(0).rankID() == 14) {
                 p.bestHand().setHandStrength(10);
                 p.bestHand().setHandName("Royal-Flush");
             } else {

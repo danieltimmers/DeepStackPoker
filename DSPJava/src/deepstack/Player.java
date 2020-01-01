@@ -105,35 +105,34 @@ public class Player {
         }
     }
 
-    public void sortHand() {
-        Collections.sort(hand, new RankComparator());
+    public void sortCardsByRank(LinkedList<Card> cards) {
+        Collections.sort(cards, new RankComparator());
+    }
+
+    public void sortCardsBySuite(LinkedList<Card> cards) {
+        Collections.sort(cards, new SuiteComparator());
     }
 
     public class BestHand {
 
         private int handStrength;
         private String handName;
-        private int highCard;
-        private LinkedList<Card> bestHand;
-
-        /*
-         * private int pairRankA; private int pairRankB; private int tripleRankA;
-         * private int tripleRankB; private int fourOKRank; private int flushSuite;
-         * private int straightRank;
-         */
+        private String handSlang;
+        private Card highCardA;
+        private Card highCardB;
+        private LinkedList<Card> hand;
 
         public BestHand() {
             this.handStrength = 0;
-            this.highCard = 0;
-            this.bestHand = new LinkedList<Card>();
+            this.hand = new LinkedList<Card>();
         }
 
-        public void setBestHand(LinkedList<Card> bestHand) {
-            this.bestHand = bestHand;
+        public void setHand(LinkedList<Card> hand) {
+            this.hand = hand;
         }
 
-        public LinkedList<Card> bestHand() {
-            return this.bestHand;
+        public LinkedList<Card> hand() {
+            return this.hand;
         }
 
         public void setHandStrength(int handStrength) {
@@ -144,8 +143,16 @@ public class Player {
             this.handName = handName;
         }
 
-        public void setHighCard(int highCard) {
-            this.highCard = highCard;
+        public void setHandSlang(String handSlang) {
+            this.handSlang = handSlang;
+        }
+
+        public void setHighCardA(Card card) {
+            this.highCardA = card;
+        }
+
+        public void setHighCardB(Card card) {
+            this.highCardB = card;
         }
 
         public int handStrength() {
@@ -156,12 +163,20 @@ public class Player {
             return this.handName;
         }
 
-        public int highCard() {
-            return this.highCard;
+        public String handSlang() {
+            return this.handSlang;
+        }
+
+        public Card highCardA() {
+            return this.highCardA;
+        }
+
+        public Card highcardB() {
+            return this.highCardB;
         }
 
         public String toString() {
-            return "Hand: " + this.handName + "  |  High Card: " + this.highCard + "  |  Strength: "
+            return "Hand: " + this.handName + "  |  High Card: " + this.highCardA + "  |  Strength: "
                     + this.handStrength;
         }
     }
