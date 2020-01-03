@@ -9,10 +9,8 @@ public class TempTesterMicro {
         g5.runToShowDownQuiet();
 
         for (Player p : g5.players()) {
-            p.showHand();
             System.out.println(p.bestHand());
             System.out.println();
         }
-
     }
 }

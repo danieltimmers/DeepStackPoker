@@ -42,9 +42,6 @@ public class Game {
         this.dealer().dealTurn(this);
         this.dealer().dealRiver(this);
 
-        for (Player p : this.players()) {
-            this.dealer().checkHandStrength(p);
-        }
     }
 
     public void newRound() {
@@ -55,4 +52,14 @@ public class Game {
         }
     }
 
+    public void setPlayersBestHands() {
+        for (Player p : this.players) {
+            if (p.isActive()) {
+                LinkedList<Card> usableCards = new LinkedList<Card>();
+                usableCards.addAll(p.pocket());
+                usableCards.addAll(tbl.communityCards());
+                p.setBestHand(new BestHand(usableCards));
+            }
+        }
+    }
 }
