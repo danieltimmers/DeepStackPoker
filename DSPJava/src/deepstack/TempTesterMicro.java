@@ -5,12 +5,14 @@ package deepstack;
 public class TempTesterMicro {
     public static void main(String[] args) {
 
-        Game g5 = new Game(5);
+        Game g5 = new Game(9);
         g5.runToShowDownQuiet();
-
+        g5.setPlayersBestHands();
         for (Player p : g5.players()) {
-            System.out.println(p.bestHand());
-            System.out.println();
+            for (Card c : p.bestHand().usableCards()) {
+                System.out.println(c);
+            }
+            System.out.println("\n" + p.bestHand().handStrength() + " | " + p.bestHand().handName() + "\n");
         }
     }
 }

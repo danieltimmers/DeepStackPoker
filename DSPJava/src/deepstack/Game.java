@@ -44,6 +44,11 @@ public class Game {
 
     }
 
+    public void runToFlopQuiet() {
+        this.dealer().dealPockets(this);
+        this.dealer().dealFlop(this);
+    }
+
     public void newRound() {
         this.tbl.resetTable();
         this.dealer.resetDeck();
@@ -58,7 +63,9 @@ public class Game {
                 LinkedList<Card> usableCards = new LinkedList<Card>();
                 usableCards.addAll(p.pocket());
                 usableCards.addAll(tbl.communityCards());
+
                 p.setBestHand(new BestHand(usableCards));
+
             }
         }
     }
