@@ -490,13 +490,26 @@ public class BestHand {
         }
 
         if (dupeHandA.size() == 3 || dupeHandB.size() == 3) {
+            // add trips to hand from the appropriate dupe list
             switch (dupeHandA.size()) {
             case (3):
                 this.hand.addAll(dupeHandA);
                 break;
             default:
                 this.hand.addAll(dupeHandB);
+                break;
+            }
 
+            // start from beginning of usableCards list,add the two highest cards (that are
+            // not the same rank as trips) to hand after the trips
+            while (usableIter.hasPrevious()) {
+                usableIter.previous();
+            }
+            while (this.hand.size() < 5) {
+                if (usableIter.next().rankID() != this.hand.getFirst().rankID()) {
+                    this.hand.add(usableIter.previous());
+                    usableIter.next();
+                }
             }
             this.handStrength = 4;
             this.threeOK = true;
@@ -515,6 +528,19 @@ public class BestHand {
                 this.hand.addAll(dupeHandA);
                 break;
             }
+
+            // start from beginning of usableCards list,add the highest card to hand that is
+            // not the same as either pair
+            while (usableIter.hasPrevious()) {
+                usableIter.previous();
+            }
+            int cardRank;
+            while (this.hand.size() < 5) {
+                cardRank = usableIter.next().rankID();
+                if (cardRank != this.hand.getFirst().rankID() && cardRank != this.hand.getLast().rankID()) {
+                    this.hand.add(usableIter.previous());
+                }
+            }
             this.handStrength = 3;
             this.twoPair = true;
             this.handName = "Two Pair";
@@ -529,6 +555,18 @@ public class BestHand {
             case (2):
                 this.hand.addAll(dupeHandA);
                 break;
+            }
+
+            // start from beginning of usableCards list,add the three highest cards (that
+            // are not the same rank as pair) to hand after the pair
+            while (usableIter.hasPrevious()) {
+                usableIter.previous();
+            }
+            while (this.hand.size() < 5) {
+                if (usableIter.next().rankID() != this.hand.getFirst().rankID()) {
+                    this.hand.add(usableIter.previous());
+                    usableIter.next();
+                }
             }
             this.handStrength = 2;
             this.pair = true;
