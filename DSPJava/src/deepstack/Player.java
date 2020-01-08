@@ -81,6 +81,10 @@ public class Player {
         return this.chipStack;
     }
 
+    public void addChips(int chips) {
+        this.chipStack += chips;
+    }
+
     public String getName() {
         return this.playerName;
     }

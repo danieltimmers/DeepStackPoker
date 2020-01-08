@@ -74,6 +74,14 @@ public class Game {
         Collections.sort(players, new PlayerHandComparator());
     }
 
+    public void sortPlayersByHighCard(LinkedList<Player> players) {
+        Collections.sort(players, new PlayerHighCardComparator());
+    }
+
+    public void runShowDown() {
+
+    }
+
     public void getWinner() {
 
         // create list of active players
@@ -110,48 +118,91 @@ public class Game {
         }
 
         if (topPlayers.size() > 1) {
-            getBestTopPlayer(topPlayers);
+            topPlayers = getBestTopPlayer(topPlayers);
+
         }
 
         for (Player p : topPlayers) {
-            System.out.println(p.getName());
-            for (Card c : p.bestHand().hand()) {
-                System.out.println(c);
-            }
-            System.out.println(p.bestHand().handStrength() + " | " + p.bestHand().handName() + "\n");
+            System.out.println(p.getName() + " | " + p.bestHand().handName());
         }
 
     }
 
-    public void getBestTopPlayer(LinkedList<Player> topPlayers) {
+    public LinkedList<Player> getBestTopPlayer(LinkedList<Player> topPlayers) {
 
         ListIterator<Player> topIter = topPlayers.listIterator();
-
+        int rankDiff;
         switch (topPlayers.getFirst().bestHand().handStrength()) {
 
         // in the case comparing multiple straights, check high card (use getFirst()),
         // return the best player(s) as winner
         case (9):
         case (5):
+            sortPlayersByHighCard(topPlayers);
+            while (topIter.nextIndex() < topPlayers.size() - 1) {
+                rankDiff = topIter.next().bestHand().hand().getFirst().rankID()
+                        - topIter.next().bestHand().hand().getFirst().rankID();
+                if (rankDiff > 0) {
+                    topIter.remove();
+                    topIter.previous();
+                    continue;
+                }
+                if (rankDiff == 0) {
+                    topIter.previous();
+                    continue;
+                }
+            }
+            break;
 
-            // in the case of flush or high card, check to see who has the highest cards
-            // (use iterator), return the best player(s) as winner
+        // in the case of flush or high card, check to see who has the highest cards
+        // (use iterator), return the best player(s) as winner
         case (6):
         case (1):
 
             while (topIter.nextIndex() < topPlayers.size() - 1) {
-                if (topIter.next().bestHand().hand().getFirst().rankID() > topIter.next().bestHand().hand().getFirst()
-                        .rankID()) {
+
+                ListIterator<Card> topHandA = topIter.next().bestHand().hand().listIterator();
+                ListIterator<Card> topHandB = topIter.next().bestHand().hand().listIterator();
+
+                while (topHandA.hasNext()) {
+                    rankDiff = topHandA.next().rankID() - topHandB.next().rankID();
+                    if (rankDiff == 0) {
+                        continue;
+                    }
+                    if (rankDiff > 0) {
+                        topIter.remove();
+                        topIter.previous();
+                        break;
+                    }
+                    if (rankDiff < 0) {
+                        topIter.previous();
+                        topIter.previous();
+                        topIter.remove();
+                        break;
+                    }
+                }
+            }
+            break;
+
+        // in the case of quads, compare the kicker card (use getLast()), return the
+        // best player(s)
+        case (8):
+            while (topIter.nextIndex() < topPlayers.size() - 1) {
+                rankDiff = topIter.next().bestHand().hand().getLast().rankID()
+                        - topIter.next().bestHand().hand().getLast().rankID();
+                if (rankDiff > 0) {
+                    topIter.remove();
+                    topIter.previous();
+                }
+                if (rankDiff < 0) {
+                    topIter.previous();
+                    topIter.previous();
                     topIter.remove();
                 }
             }
-
-            // in the case of quads, compare the kicker card (use getLast()), return the
-            // best player(s)
-        case (8):
-
-            // in the case of full house, compare trips then pair (use getFirst() then
-            // getLast()), return the best player(s)
+            break;
+        // in the case of full house, compare trips then pair (use getFirst() then
+        // getLast()), return the best player(s)
         case (7):
 
             // in the case of three of a kind, compare trips then the two kicker cards with
@@ -165,5 +216,6 @@ public class Game {
             // in the case of one pair, compare the pair then three kicker cards
         case (2):
         }
-    }
+        return topPlayers;
+    }// END getTopBestPlayer()
 }

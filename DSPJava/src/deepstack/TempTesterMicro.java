@@ -27,14 +27,21 @@ public class TempTesterMicro {
 
         g5.runToShowDownQuiet();
         g5.setPlayersBestHands();
+
         // g5.sortPlayersByHandStr(g5.players());
 
         for (Player p : g5.players()) {
             System.out.println(p.getName());
-            System.out.println(p.bestHand().handStrength() + " | " + p.bestHand().handName());
+            for (Card c : p.bestHand().hand()) {
+                System.out.println(c);
+            }
+            System.out.println(p.bestHand().handStrength() + " | " + p.bestHand().handName() + "\n");
         }
+
         System.out.println("\n Top Hands:");
         g5.getWinner();
+
+        // END MAIN
     }
 
     public void microExtraCode() {
