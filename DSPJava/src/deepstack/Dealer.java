@@ -9,6 +9,7 @@ public class Dealer {
     private LinkedList<Card> cardsDealt;
 
     public Dealer() {
+
         this.deck = buildDeck();
         this.discardPile = new LinkedList<Card>();
         this.cardsDealt = new LinkedList<Card>();
@@ -28,8 +29,16 @@ public class Dealer {
         return newDeck;
     }
 
+    public LinkedList<Card> getDeck() {
+        return this.deck;
+    }
+
     private void shuffleDeck() {
         Collections.shuffle(this.deck);
+    }
+
+    public void rotateButton(Game g) {
+        Collections.rotate(g.players(), -1);
     }
 
     private void burnCard() {
@@ -43,16 +52,35 @@ public class Dealer {
         deck.remove(0);
     }
 
-    public void dealPockets(LinkedList<Player> players) {
+    private void giveCard(PokerTable tbl) {
+        tbl.addCommunityCard(deck.get(0));
+        cardsDealt.add(deck.get(0));
+        deck.remove(0);
+    }
+
+    public void dealPockets(Game g) {
         for (int i = 0; i < 2; i++) {
-            for (Player p : players) {
+            for (Player p : g.players()) {
                 giveCard(p);
             }
         }
     }
 
-    public void dealFlop() {
+    public void dealFlop(Game g) {
+        burnCard();
+        for (int i = 0; i < 3; i++) {
+            giveCard(g.tbl());
+        }
+    }
 
+    public void dealTurn(Game g) {
+        burnCard();
+        giveCard(g.tbl());
+    }
+
+    public void dealRiver(Game g) {
+        burnCard();
+        giveCard(g.tbl());
     }
 
     public void callWinner() {
@@ -77,6 +105,12 @@ public class Dealer {
 
     public void showCardsDealt() {
         for (Card c : cardsDealt) {
+            System.out.println(c);
+        }
+    }
+
+    public void showDiscardPile() {
+        for (Card c : discardPile) {
             System.out.println(c);
         }
     }

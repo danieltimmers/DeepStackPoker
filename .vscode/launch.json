@@ -2,6 +2,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - IterTester",
+            "request": "launch",
+            "mainClass": "deepstack.IterTester",
+            "projectName": "DSPJava"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - TempTesterMacro",
+            "request": "launch",
+            "mainClass": "deepstack.TempTesterMacro",
+            "projectName": "DSPJava"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - TempTesterMicro",
+            "request": "launch",
+            "mainClass": "deepstack.TempTesterMicro",
+            "projectName": "DSPJava"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - TempTester",
             "request": "launch",
             "mainClass": "deepstack.TempTester",

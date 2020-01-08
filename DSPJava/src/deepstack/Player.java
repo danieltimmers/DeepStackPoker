@@ -5,25 +5,51 @@ import java.util.*;
 public class Player {
     private String playerName;
     private LinkedList<Card> pocket;
-    private LinkedList<Card> hand;
     private int chipStack;
+    private BestHand bestHand;
+    private boolean active;
 
     public Player(String playerName, int chipStack) {
         this.playerName = playerName;
         this.chipStack = chipStack;
         this.pocket = new LinkedList<Card>();
-        this.hand = new LinkedList<Card>();
+        this.active = true;
+    }
+
+    public Player() {
+        this.playerName = "default";
+        this.chipStack = 100;
+        this.pocket = new LinkedList<Card>();
+        this.active = true;
+    }
+
+    public void joinGame(Game g) {
+        g.players().add(this);
+    }
+
+    public boolean isActive() {
+        return this.active;
+    }
+
+    public void setActive(boolean tf) {
+        this.active = tf;
+    }
+
+    public LinkedList<Card> pocket() {
+        return this.pocket;
+    }
+
+    public void resetHand() {
+        this.pocket.clear();
+        this.bestHand = null;
     }
 
     public void acceptCard(Card c) {
-        this.hand.add(c);
-        if (this.pocket.size() <= 2) {
-            this.pocket.add(c);
-        }
+        this.pocket.add(c);
     }
 
     public void fold() {
-
+        this.active = false;
     }
 
     public int bet(int b) {
@@ -59,7 +85,16 @@ public class Player {
         return this.playerName;
     }
 
-    public String showPocket() {
-        return this.pocket.get(0) + "\n" + this.pocket.get(1);
+    public void showPocket() {
+        System.out.println(this.pocket.get(0) + "\n" + this.pocket.get(1) + "\n");
     }
+
+    public void setBestHand(BestHand bestHand) {
+        this.bestHand = bestHand;
+    }
+
+    public BestHand bestHand() {
+        return this.bestHand;
+    }
+
 }
