@@ -138,6 +138,9 @@ public class BestHand {
                 if (this.fullHouse) {
                     return;
                 }
+
+                // if best hand is a flush, remove lowest rank card(s) so this.hand is the five
+                // highest suited cards
                 while (this.hand.size() > 5) {
                     this.hand.removeLast();
                 }

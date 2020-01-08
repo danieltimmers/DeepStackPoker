@@ -5,9 +5,9 @@ package deepstack;
 public class TempTesterMacro {
     public static void main(String[] args) {
 
-        Game gg = new Game(1);
+        Game gg = new Game(5);
         int[] nPerHand = new int[11];
-        int nOfRounds = 10000000;
+        int nOfRounds = 1000;
         double totalHands = nOfRounds * gg.players().size();
         String[] handType = { "0", "High Card", "Pair", "Two Pair", "Three of a Kind", "Straight", "Flush",
                 "Full House", "Four of a Kind", "Straight-Flush", "Royal Flush" };
@@ -20,6 +20,13 @@ public class TempTesterMacro {
                 nPerHand[p.bestHand().handStrength()]++;
 
                 // INSERT EXTRA CODE HERE
+                if (p.bestHand().handStrength() == 6) {
+                    System.out.println();
+                    for (Card cc : p.bestHand().hand()) {
+                        System.out.println(cc);
+                    }
+                    System.out.println(p.bestHand().handStrength());
+                }
             }
             gg.newRound();
         }
