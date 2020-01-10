@@ -35,7 +35,7 @@ public class TempTesterMicro {
             for (Card c : p.bestHand().hand()) {
                 System.out.println(c);
             }
-            System.out.println(p.bestHand().handStrength() + " | " + p.bestHand().handName() + "\n");
+            System.out.println(p.bestHand().handStrength() + " | \t\t" + p.bestHand().handName() + "\n");
         }
 
         System.out.println("\n Top Hands:");

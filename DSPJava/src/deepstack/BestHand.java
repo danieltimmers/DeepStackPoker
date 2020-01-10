@@ -104,11 +104,11 @@ public class BestHand {
         return "Hand: " + this.handName + "  |  High Card: " + this.highCardA + "  |  Strength: " + this.handStrength;
     }
 
-    public void sortCardsByRank(LinkedList<Card> cards) {
+    private void sortCardsByRank(LinkedList<Card> cards) {
         Collections.sort(cards, new RankComparator());
     }
 
-    public void sortCardsBySuite(LinkedList<Card> cards) {
+    private void sortCardsBySuite(LinkedList<Card> cards) {
         Collections.sort(cards, new SuiteComparator());
     }
 
@@ -233,7 +233,7 @@ public class BestHand {
 
     }
 
-    public void checkStraightFlush() {
+    private void checkStraightFlush() {
         this.straightFlush = false;
 
         // sort flush by rank for easiest straight detection
@@ -302,7 +302,7 @@ public class BestHand {
      * @param bestHand
      * @return
      */
-    public void checkStraight() {
+    private void checkStraight() {
         this.straight = false;
 
         // sort this.usableCards by rank for easiest straight detection
@@ -370,7 +370,7 @@ public class BestHand {
         return;
     }
 
-    public void checkDupes() {
+    private void checkDupes() {
 
         this.fourOK = false;
         this.fullHouse = false;

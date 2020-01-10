@@ -83,10 +83,6 @@ public class Dealer {
         giveCard(g.tbl());
     }
 
-    public void callWinner() {
-
-    }
-
     public void resetDeck() {
         for (Card c : discardPile) {
             deck.add(c);

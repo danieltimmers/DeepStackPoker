@@ -70,16 +70,53 @@ public class Game {
         }
     }
 
-    public void sortPlayersByHandStr(LinkedList<Player> players) {
-        Collections.sort(players, new PlayerHandComparator());
+    private void sortPlayersByHandStrength(LinkedList<Player> players) {
+        Collections.sort(players, new PlayerHandStrengthComparator());
     }
 
-    public void sortPlayersByHighCard(LinkedList<Player> players) {
-        Collections.sort(players, new PlayerHighCardComparator());
-    }
+    private void sortTopPlayersByHandType(LinkedList<Player> players, int handType) {
+        switch (handType) {
+        // For straight-flush, flush, and straight, only need to sort players by first
+        // (high) card
+        case (9):
+        case (6):
+        case (5):
+            Collections.sort(players, new PlayerCardIndexComparator(0));
+            break;
 
-    public void sortPlayersByLowCard(LinkedList<Player> players) {
-        Collections.sort(players, new PlayerLowCardComparator());
+        // For Four of a kind and full house, sort players by fifth (last) card, then
+        // first card
+        case (8):
+        case (7):
+            Collections.sort(players, new PlayerCardIndexComparator(4));
+            Collections.sort(players, new PlayerCardIndexComparator(0));
+            break;
+
+        // For three of a kind and two pair, sort players by fifth (last) card, then
+        // fourth card, then first card
+        case (4):
+        case (3):
+            Collections.sort(players, new PlayerCardIndexComparator(4));
+            Collections.sort(players, new PlayerCardIndexComparator(3));
+            Collections.sort(players, new PlayerCardIndexComparator(0));
+            break;
+
+        // for one pair, sort players by fifth, then fourth, then third, then first card
+        case (2):
+            for (int i = 4; i >= 2; i--) {
+                Collections.sort(players, new PlayerCardIndexComparator(i));
+            }
+            Collections.sort(players, new PlayerCardIndexComparator(0));
+            break;
+
+        // for high card, sort players five times, starting from fifth card, 4th, 3rd,
+        // 2nd, then the final sort will of the first card
+        case (1):
+            for (int i = 4; i >= 0; i--) {
+                Collections.sort(players, new PlayerCardIndexComparator(i));
+            }
+            break;
+        }
     }
 
     public void runShowDown() {
@@ -97,7 +134,7 @@ public class Game {
         }
 
         // sort active players by their best hand strength (high to low)
-        sortPlayersByHandStr(activePlayers);
+        sortPlayersByHandStrength(activePlayers);
 
         // iterator for sorted active players
         ListIterator<Player> actIter = activePlayers.listIterator();
@@ -122,7 +159,7 @@ public class Game {
         }
 
         if (topPlayers.size() > 1) {
-            topPlayers = getBestTopPlayer(topPlayers);
+            topPlayers = getBestTopPlayer(topPlayers); // DEBUG: STEP INTO
 
         }
 
@@ -132,17 +169,21 @@ public class Game {
 
     }
 
-    public LinkedList<Player> getBestTopPlayer(LinkedList<Player> topPlayers) {
+    private LinkedList<Player> getBestTopPlayer(LinkedList<Player> topPlayers) {
 
+        int handType = topPlayers.getFirst().bestHand().handStrength();
         ListIterator<Player> topIter = topPlayers.listIterator();
         int rankDiff;
-        switch (topPlayers.getFirst().bestHand().handStrength()) {
 
-        // in the case comparing multiple straights, check high card (use getFirst()),
-        // return the best player(s) as winner
+        // sort topPlayers for algorithm that chooses top player(s)
+        sortTopPlayersByHandType(topPlayers, handType);
+        switch (handType) {
+
+        // algorithm for choosing top player(s) for cases: Straight-Flush, Flush, and
+        // Straight
         case (9):
+        case (6):
         case (5):
-            sortPlayersByHighCard(topPlayers);
             while (topIter.nextIndex() < topPlayers.size() - 1) {
                 rankDiff = topIter.next().bestHand().hand().getFirst().rankID()
                         - topIter.next().bestHand().hand().getFirst().rankID();
@@ -155,9 +196,13 @@ public class Game {
             }
             break;
 
+        // algorithm for choosing top player(s) for cases: Four of a Kind, Full House,
+        // Three of a kind, Two Pair, One Pair, and High Card
         default:
-            sortPlayersByLowCard(topPlayers);
-            sortPlayersByHighCard(topPlayers);
+            if (topPlayers.getFirst().bestHand().handStrength() == 3) {
+                // sort
+            }
+
             while (topIter.nextIndex() < topPlayers.size() - 1) {
 
                 ListIterator<Card> topHandA = topIter.next().bestHand().hand().listIterator();
